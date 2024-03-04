@@ -91,4 +91,8 @@ public class Worker {
     public void setAlive(boolean alive) {
         this.alive = alive;
     }
+
+    public boolean isDead() {
+        return false;
+    }
 }

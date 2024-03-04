@@ -116,8 +116,8 @@ public class Village {
     }
 
 
-/*
-   public boolean AddWorker(String name, String occupation) {
+
+   public boolean addWorker(String name, String occupation) {
         if (workers.size() >= maxWorkers) {
             System.out.println("The village is already at full capacity.");
             return false;
@@ -134,11 +134,11 @@ public class Village {
         System.out.println("There is no such job.");
         return false;
     }
-*/
 
 
 
-    public boolean AddWorker(String name, String occupation) {
+/*
+    public boolean addWorker(String name, String occupation) {
         if(occupationHashMap.containsKey(occupation)) {
             IOccupationAction jobInterface = occupationHashMap.get(occupation);
             Worker worker = new Worker(name, occupation, jobInterface);
@@ -149,26 +149,29 @@ public class Village {
         System.out.println("There is no such job.");
         return false;
     }
+*/
 
 
-
-    public void AddProject(String name) {
+    public boolean addProject(String name) {
         if (possibleProjects.containsKey(name)) {
             PossibleProject possibleProject = possibleProjects.get(name);
-            if (getWood() > possibleProject.getWoodCost() &&
-                    getMetal() > possibleProject.getMetalCost()) {
+            /*if (getWood() > possibleProject.getWoodCost() &&
+                    getMetal() > possibleProject.getMetalCost()) {*/
+            if (getWood() >= possibleProject.getWoodCost() &&
+                    getMetal() >= possibleProject.getMetalCost()) {
                 wood -= possibleProject.getWoodCost();
                 metal -= possibleProject.getMetalCost();
 
                 Project newProject = possibleProject.GetProject();
                 projects.add(newProject);
                 System.out.println(newProject.getName() + " added to the project queue!");
-                return;
+                return true;
             }
             System.out.println("Not enough material!");
-            return;
+            return false;
         }
         System.out.println("That was not one of the options.");
+        return false;
     }
 
     public void AddFood(String name) {

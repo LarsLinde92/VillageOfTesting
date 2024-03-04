@@ -75,7 +75,7 @@ public class VillageInput {
         }
         System.out.println("What's their job? The options are Farmer, Lumberjack, Miner or Builder.");
         String occupation = scanner.nextLine().toLowerCase();
-        village.AddWorker(name, occupation);
+        village.addWorker(name, occupation);
         System.out.println();
     }
     private void AddProject() {
@@ -84,7 +84,7 @@ public class VillageInput {
             System.out.println(possibleProject.getName() + ": " + possibleProject.getWoodCost() + " wood, " + possibleProject.getMetalCost() + " metal");
         }
         String name = scanner.nextLine();
-        village.AddProject(name);
+        village.addProject(name);
         System.out.println();
     }
 
