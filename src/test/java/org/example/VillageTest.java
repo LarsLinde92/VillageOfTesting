@@ -211,7 +211,6 @@ public class VillageTest {
         // Then
         assertEquals(initialMaxWorkers + 2, village.getMaxWorkers(), "Max workers should increase by 2 after building a house.");
         assertTrue(isAdded, "House project should be successfully added");
-
     }
 
     @Test
@@ -320,10 +319,13 @@ public class VillageTest {
         village.setFood(10);
         assertEquals(6, village.getWorkers().size(), "Initial worker count should be 6.");
 
-        // Simulating initial phase of resource gathering and infrastructure development.
+        // Simulating the initial phase of resource gathering and infrastructure development.
         simulateDays(village, 5); // Simulate 5 days for resource accumulation.
-        addProject(village, "House"); // Increase worker limit by building an extra house.
+        addProject(village, "House"); // Increase the worker limit by building an extra house.
         simulateDays(village, 3); // Allow time for house construction.
+        assertTrue(village.getBuildings().stream().anyMatch(b -> b.getName().equals("House")), "A House should be present among the buildings.");
+
+
 
         // When:
         // Expansion phase with additional workers and building projects to gather enough resources for the Castle.
@@ -333,30 +335,53 @@ public class VillageTest {
         // Adds essential buildings/projects for increased resource production.
         addProject(village, "Woodmill");
         addProject(village, "Quarry");
+        simulateDays(village, 12); // Simulates days for project completion and resource gathering.
+
+        assertTrue(village.getBuildings().stream().anyMatch(b -> b.getName().equals("Woodmill")), "Woodmill should be completed.");
+        assertTrue(village.getBuildings().stream().anyMatch(b -> b.getName().equals("Quarry")), "Quarry should be completed.");
+
+
+        // After adding Woodmill and Quarry, simulate a day to accumulate resources
+        simulateDays(village, 1); // Accumulate resources for the Farm
         addProject(village, "Farm");
-        simulateDays(village, 20); // Simulates days for project completion and resource gathering.
+        simulateDays(village, 5); // Adjusted days for project completion and resource gathering
+        assertTrue(village.getBuildings().stream().anyMatch(b -> b.getName().equals("Farm")), "Farm should be completed.");
+
 
         // Initiates the construction of the Castle, the winning condition.
         addProject(village, "Castle");
         simulateDays(village, 50); // Simulates days until the Castle is built.
+        assertTrue(village.getBuildings().stream().anyMatch(b -> b.getName().equals("Castle")), "Castle should be completed.");
+
 
         // Then:
         // Verifies that building the Castle wins the game.
         assertTrue(village.isGameOver(), "Game should be over after building the castle.");
     }
+
     // Helper methods for the test
+    // Adds a specified number of workers to the village, cycling through a predefined set of occupations.
+    // This method ensures the village starts with a diverse workforce for simulation purposes.
     private void addMaxWorkers(Village village, int numberOfWorkers) {
         String[] occupations = {"farmer", "lumberjack", "miner", "builder", "miner", "lumberjack"};
         for (int i = 0; i < numberOfWorkers; i++) {
+            // Adds a worker with a cyclically chosen occupation from the array to the village
             village.addWorker("Worker" + i, occupations[i % occupations.length]);
         }
     }
+
+    // Attempts to add a specified project to the village.
+    // This method is used to simulate the village's development by adding various infrastructure projects.
     private void addProject(Village village, String projectName) {
         village.addProject(projectName);
     }
 
+    // Simulates the passage of time within the village by invoking the village's daily routine for a number of days.
+    // This method is crucial for testing the village's resource accumulation,
+    // project progression, and overall development.
     private void simulateDays(Village village, int days) {
         for (int i = 0; i < days; i++) {
+            // Simulates a single day's activities and changes within the village
             village.Day();
         }
     }
@@ -458,6 +483,7 @@ public class VillageTest {
         //Verify that the woodPerDay was correctly updated
         assertEquals(newWoodPerDay, village.getWoodPerDay(), "woodPerDay should be updated to the new value.");
     }
+
     @Test
     @DisplayName("Verify setMetalPerDay correctly updates daily metal production rate.")
     public void testSetMetalPerDay() {
@@ -468,7 +494,11 @@ public class VillageTest {
 
         //Verify that the woodPerDay was correctly updated
         assertEquals(newMetalPerDay, village.getMetalPerDay(),"metalPerDay should be updated to the new value.");
+
     }
+
+
+
 }
 
 
